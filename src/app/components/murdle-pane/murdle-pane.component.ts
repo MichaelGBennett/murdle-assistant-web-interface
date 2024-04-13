@@ -8,104 +8,15 @@ import * as p5 from 'p5';
 })
 export class MurdlePaneComponent implements OnInit {
 
-  constructor() { }
+  grid: number = 0;
 
   ngOnInit(): void {
-    let canvas = new p5(this.sketch2);
-  }
-
-  private sketch2(p: p5) {
-    let bgColor:p5.Color = p.color(200);
-    let msquare:mSquare;
-
-    p.setup = () => {
-      msquare = new mSquare(200, 200, 200);
-      let canvas = p.createCanvas(500, 500);
-      canvas.mouseClicked(clickInGrid);
-    };
-
-    p.draw = () => {
-      p.background(bgColor);
-      p.rect(100, 100, 100, 100);
-      msquare.drawMe();
-    };
-
-    function clickInGrid(){
-      bgColor = p.color(255, 100, 10);
-    }
-
-    class mSquare{
-      xPOS: number;
-      yPOS: number;
-      size: number;
-      boxtext: string;
-      bgColor: any;
-      
-      constructor(xPOS : number, yPOS : number, size : number){
-        this.xPOS = xPOS;
-        this.yPOS = yPOS;
-        this.size = size;
-        this.boxtext = ""
-        this.bgColor = p.color(255, 255, 255);
-      }
-      
-      isClicked(x : number, y : number){
-        if (x > this.xPOS && x < this.xPOS + this.size){
-          if (y > this.yPOS && y < this.yPOS + this.size){
-            return true;
-          }
-        }
-        return false;
-      }
-      
-      drawMe(){
-        var c = this.bgColor == null ? p.color(255) : this.bgColor
-        p.fill(c);
-        p.rect(this.xPOS, this.yPOS, this.size, this.size);
-        p.fill(0);
-        p.text(this.boxtext, this.xPOS, this.yPOS, this.size, this.size);
-      }
-      
-      clickMe(){
-        if (this.boxtext === ""){
-          this.boxtext = "x";
-        }
-        else if (this.boxtext === "x"){
-          this.boxtext = "o";
-        }
-        else if (this.boxtext === "o"){
-          this.boxtext = "";
-        }
-      }
-      
-      setText(boxtext: string){
-        this.boxtext = boxtext;
-      }
-      
-      setBGColor(c : p5.Color){
-        if (c != null){
-          this.bgColor = c;
-        }
-      }
-      
-      getXPOS(){
-        return this.xPOS;
-      }
-      
-      getYPOS(){
-        return this.yPOS;
-      }
-      
-      getText(){
-        return this.boxtext;
-      }
-    }
-
+    let canvas = new p5(this.sketch);
   }
   
   private sketch(p: p5) {
-    let grid: mSquare[];
-    let legendGrid: mSquare[];
+    let grid: mSquare[] = [];
+    let legendGrid: mSquare[] = [];
     let textSizeVar = 20;
     let xOffset = 50;
     let yOffset = 50;
@@ -113,7 +24,7 @@ export class MurdlePaneComponent implements OnInit {
 
     p.setup = () => {
       var originalYOffset = yOffset;
-  
+
       var topLetters = "ABCDEFGHIJKL";
       for(var x = 0; x < 12; x++){
         var xPOS = x * size + xOffset;
