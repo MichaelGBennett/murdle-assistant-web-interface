@@ -76,6 +76,7 @@ export class MurdlePaneComponent implements OnInit {
       let canvas = p.createCanvas(500, 500);
       
       canvas.mouseClicked(clickInGrid);
+      canvas.parent('murdle-sketch');
     };
   
     p.draw = () => {
