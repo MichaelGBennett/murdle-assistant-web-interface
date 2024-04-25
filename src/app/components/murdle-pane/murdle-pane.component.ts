@@ -97,7 +97,7 @@ export class MurdlePaneComponent implements OnInit {
                 if (clickedSquare.getYPOS() == xSquare.getYPOS() || clickedSquare.getXPOS() == xSquare.getXPOS()){
                   // if clicked square = o and xsquare = x and is outside squares box but in squares row/col
                   if (xSquare.getText() === "x"){
-                    
+                    grid.map(item => item.markXInMirroredBoxFromOSquare(clickedSquare, xSquare))
                   }
                 }
               })
@@ -117,7 +117,7 @@ export class MurdlePaneComponent implements OnInit {
       grid.forEach(murdleSquare => {
         if (murdleSquare.getText() === "o"){
           grid.map(item => item.markXInSameBoxAsOSquare(murdleSquare));
-          grid.map(item => item.markXInMirroredBoxFromOSquare(murdleSquare));
+          // grid.map(item => item.markXInMirroredBoxFromOSquare(murdleSquare));
         }
         else if (murdleSquare.getText() === "x"){
         }
@@ -204,7 +204,7 @@ export class MurdlePaneComponent implements OnInit {
         }
       }
 
-      markXInMirroredBoxFromOSquare(oSquare: mSquare){
+      markXInMirroredBoxFromOSquare(oSquare: mSquare, xSquare: mSquare){
         var mirrordYPOS = (xSquare.getYPOS() - yOffset) / size;
         var mirrordXPOS = (xSquare.getXPOS() - xOffset) / size;
         
@@ -215,9 +215,9 @@ export class MurdlePaneComponent implements OnInit {
         if (mirrordXPOS >= 4 && mirrordXPOS < 8) mirrordXPOS += 4;
         else if (mirrordXPOS >= 8 && mirrordXPOS < 12) mirrordXPOS -= 4;
         else if (mirrordXPOS >= 0 && mirrordXPOS < 4) mirrordXPOS -= 4;
-        
-        if (((this.getXPOS() - xOffset) / size == mirrordYPOS && (this.getYPOS() - yOffset) / size == (xSquare.getYPOS() - yOffset) / size) 
-          || (this.getYPOS() - yOffset) / size == mirrordXPOS && (this.getXPOS() - xOffset) / size == (xSquare.getXPOS() - xOffset) / size){
+
+        if (((this.getXPOS() - xOffset) / size == mirrordYPOS && (this.getYPOS() - yOffset) / size == (oSquare.getYPOS() - yOffset) / size)
+          || (this.getYPOS() - yOffset) / size == mirrordXPOS && (this.getXPOS() - xOffset) / size == (oSquare.getXPOS() - xOffset) / size){
           this.setText("x");
         }
       }
