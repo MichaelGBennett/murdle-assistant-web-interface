@@ -17,7 +17,7 @@ export class MurdlePaneComponent implements OnInit {
   private sketch(p: p5) {
     let grid: mSquare[] = [];
     let legendGrid: mSquare[] = [];
-    let textSizeVar = 20;
+    let textSizeVar = 25;
     let xOffset = 50;
     let yOffset = 50;
     let size = 30;
@@ -71,7 +71,7 @@ export class MurdlePaneComponent implements OnInit {
       
       yOffset = originalYOffset;
       
-      p.textAlign(p.CENTER);
+      // p.textAlign(p.CENTER);
       p.textSize(textSizeVar);
       let canvas = p.createCanvas(500, 500);
       
@@ -95,31 +95,9 @@ export class MurdlePaneComponent implements OnInit {
               if (clickedSquare.getText() === "o"){
                 grid.forEach(xSquare => {
                 if (clickedSquare.getYPOS() == xSquare.getYPOS() || clickedSquare.getXPOS() == xSquare.getXPOS()){
-                  var csx = Math.floor((clickedSquare.getXPOS() - xOffset) / size / 4)
-                  var csy = Math.floor((clickedSquare.getYPOS() - yOffset) / size / 4)
-                  var xsx = Math.floor((xSquare.getXPOS() - xOffset) / size / 4)
-                  var xsy = Math.floor((xSquare.getYPOS() - yOffset) / size / 4)
-                  if (csx == xsx && csy == xsy){
-                    xSquare.setText("x");
-                  }
                   // if clicked square = o and xsquare = x and is outside squares box but in squares row/col
-                  else if (xSquare.getText() === "x"){
-                    grid.forEach(mirrorSquare => {
-                      var mirrordYPOS = (xSquare.getYPOS() - yOffset) / size;
-                      var mirrordXPOS = (xSquare.getXPOS() - xOffset) / size;
-                      
-                      if (mirrordYPOS >= 4 && mirrordYPOS < 8) mirrordYPOS += 4;
-                      else if (mirrordYPOS >= 8 && mirrordYPOS < 12) mirrordYPOS -= 4;
-                      else if (mirrordYPOS >= 0 && mirrordYPOS < 4) mirrordYPOS -= 4;
-                      
-                      if (mirrordXPOS >= 4 && mirrordXPOS < 8) mirrordXPOS += 4;
-                      else if (mirrordXPOS >= 8 && mirrordXPOS < 12) mirrordXPOS -= 4;
-                      else if (mirrordXPOS >= 0 && mirrordXPOS < 4) mirrordXPOS -= 4;
-                      
-                      if (((mirrorSquare.getXPOS() - xOffset) / size == mirrordYPOS && (mirrorSquare.getYPOS() - yOffset) / size == (clickedSquare.getYPOS() - yOffset) / size) || (mirrorSquare.getYPOS() - yOffset) / size == mirrordXPOS && (mirrorSquare.getXPOS() - xOffset) / size == (clickedSquare.getXPOS() - xOffset) / size){
-                        mirrorSquare.setText("x");
-                      }
-                    })
+                  if (xSquare.getText() === "x"){
+                    
                   }
                 }
               })
@@ -135,6 +113,15 @@ export class MurdlePaneComponent implements OnInit {
           }
         })
       }
+
+      grid.forEach(murdleSquare => {
+        if (murdleSquare.getText() === "o"){
+          grid.map(item => item.markXInSameBoxAsOSquare(murdleSquare));
+          grid.map(item => item.markXInMirroredBoxFromOSquare(murdleSquare));
+        }
+        else if (murdleSquare.getText() === "x"){
+        }
+      })
     }
     
     class mSquare{
@@ -201,6 +188,38 @@ export class MurdlePaneComponent implements OnInit {
       
       getText(){
         return this.boxtext;
+      }
+
+      markXInSameBoxAsOSquare(oSquare: mSquare){
+        if (oSquare.getXPOS() == this.getXPOS() || oSquare.getYPOS() == this.getYPOS()){
+          if (!(oSquare.getXPOS() == this.getXPOS() && oSquare.getYPOS() == this.getYPOS())){
+            var thisXthSquare = Math.floor((this.getXPOS() - xOffset) / size / 4)
+            var thisYthSquare = Math.floor((this.getYPOS() - yOffset) / size / 4)
+            var OXthSquare = Math.floor((oSquare.getXPOS() - xOffset) / size / 4)
+            var OYthSquare = Math.floor((oSquare.getYPOS() - yOffset) / size / 4)
+            if (thisXthSquare == OXthSquare && thisYthSquare == OYthSquare){
+              this.setText("x");
+            }
+          }
+        }
+      }
+
+      markXInMirroredBoxFromOSquare(oSquare: mSquare){
+        var mirrordYPOS = (xSquare.getYPOS() - yOffset) / size;
+        var mirrordXPOS = (xSquare.getXPOS() - xOffset) / size;
+        
+        if (mirrordYPOS >= 4 && mirrordYPOS < 8) mirrordYPOS += 4;
+        else if (mirrordYPOS >= 8 && mirrordYPOS < 12) mirrordYPOS -= 4;
+        else if (mirrordYPOS >= 0 && mirrordYPOS < 4) mirrordYPOS -= 4;
+        
+        if (mirrordXPOS >= 4 && mirrordXPOS < 8) mirrordXPOS += 4;
+        else if (mirrordXPOS >= 8 && mirrordXPOS < 12) mirrordXPOS -= 4;
+        else if (mirrordXPOS >= 0 && mirrordXPOS < 4) mirrordXPOS -= 4;
+        
+        if (((this.getXPOS() - xOffset) / size == mirrordYPOS && (this.getYPOS() - yOffset) / size == (xSquare.getYPOS() - yOffset) / size) 
+          || (this.getYPOS() - yOffset) / size == mirrordXPOS && (this.getXPOS() - xOffset) / size == (xSquare.getXPOS() - xOffset) / size){
+          this.setText("x");
+        }
       }
     }
   }
