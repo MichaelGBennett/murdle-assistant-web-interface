@@ -73,7 +73,7 @@ export class MurdlePaneComponent implements OnInit {
       
       p.textAlign(p.CENTER);
       // p.textSize(textSizeVar);
-      let canvas = p.createCanvas(500, 500);
+      let canvas = p.createCanvas(420, 420);
       
       canvas.mouseClicked(clickInGrid);
       canvas.parent('murdle-sketch');
@@ -151,8 +151,10 @@ export class MurdlePaneComponent implements OnInit {
       drawMe(){
         var c = this.bgColor == null ? p.color(255) : this.bgColor
         p.fill(c);
+        p.strokeWeight(3);
         p.rect(this.xPOS, this.yPOS, this.size, this.size);
         p.fill(0);
+        p.strokeWeight(1);
         p.text(this.boxtext, this.xPOS, this.yPOS + 10, this.size - 10, this.size);
       }
       
