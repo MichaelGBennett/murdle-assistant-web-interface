@@ -17,7 +17,7 @@ export class MurdlePaneComponent implements OnInit {
   private sketch(p: p5) {
     let grid: mSquare[] = [];
     let legendGrid: mSquare[] = [];
-    let textSizeVar = 25;
+    let textSizeVar = 30;
     let xOffset = 50;
     let yOffset = 50;
     let size = 30;
@@ -71,8 +71,8 @@ export class MurdlePaneComponent implements OnInit {
       
       yOffset = originalYOffset;
       
-      // p.textAlign(p.CENTER);
-      p.textSize(textSizeVar);
+      p.textAlign(p.CENTER);
+      // p.textSize(textSizeVar);
       let canvas = p.createCanvas(500, 500);
       
       canvas.mouseClicked(clickInGrid);
@@ -153,7 +153,7 @@ export class MurdlePaneComponent implements OnInit {
         p.fill(c);
         p.rect(this.xPOS, this.yPOS, this.size, this.size);
         p.fill(0);
-        p.text(this.boxtext, this.xPOS, this.yPOS, this.size, this.size);
+        p.text(this.boxtext, this.xPOS, this.yPOS + 10, this.size - 10, this.size);
       }
       
       clickMe(){
