@@ -13,4 +13,9 @@ h1{
     width: fit-content;
     margin: auto;
     padding-top: 30px;
+   
+}
+
+.text{
+    color: #aaa;
 }
