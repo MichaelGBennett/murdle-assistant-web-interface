@@ -43,31 +43,40 @@ export class MurdlePaneComponent implements OnInit {
         legendGrid.push(letterBox);
       }
       
-      for(var x = 0; x < 12; x++){
-        var xPOS = x * size + xOffset;
-        for (var y = 0; y < 4; y ++){
-          var yPOS = y * size + yOffset;
-          grid.push(new mSquare(xPOS, yPOS, size));
-        }
-      }
+      // for(var x = 0; x < 12; x++){
+      //   let previous: mSquare | null = null;
+      //   var xPOS = x * size + xOffset;
+      //   for (var y = 0; y < 4; y ++){
+      //     var yPOS = y * size + yOffset;
+      //     let next: mSquare = new mSquare(xPOS, yPOS, size);
+      //     next.setLeft(previous);
+      //     if (previous != null) previous.setRight(next);
+      //     grid.push(next);
+      //     previous = next;
+      //   }
+      // }
       
-      yOffset += size * 4;
-      for(var x = 0; x < 8; x++){
-        var xPOS = x * size + xOffset;
-        for (var y = 0; y < 4; y ++){
-          var yPOS = y * size + yOffset; 
-          grid.push(new mSquare(xPOS, yPOS, size));
-        }
-      }
+      // yOffset += size * 4;
+      // for(var x = 0; x < 8; x++){
+      //   var xPOS = x * size + xOffset;
+      //   for (var y = 0; y < 4; y ++){
+      //     var yPOS = y * size + yOffset; 
+      //     grid.push(new mSquare(xPOS, yPOS, size));
+      //   }
+      // }
       
-      yOffset += size * 4;
-      for(var x = 0; x < 4; x++){
-        var xPOS = x * size + xOffset;
-        for (var y = 0; y < 4; y ++){
-          var yPOS = y * size + yOffset;
-          grid.push(new mSquare(xPOS, yPOS, size));
-        }
-      }
+      // yOffset += size * 4;
+      // for(var x = 0; x < 4; x++){
+      //   var xPOS = x * size + xOffset;
+      //   for (var y = 0; y < 4; y ++){
+      //     var yPOS = y * size + yOffset;
+      //     grid.push(new mSquare(xPOS, yPOS, size));
+      //   }
+      // }
+
+      createGrid(12, yOffset);
+      createGrid(8, yOffset + size * 4);
+      createGrid(4, yOffset + size * 8);
       
       yOffset = originalYOffset;
       
@@ -123,6 +132,21 @@ export class MurdlePaneComponent implements OnInit {
         }
       })
     }
+
+    function createGrid(width:number, yOffset:number){
+      for(var x = 0; x < width; x++){
+        let previous: mSquare | null = null;
+        var xPOS = x * size + xOffset;
+        for (var y = 0; y < 4; y ++){
+          var yPOS = y * size + yOffset;
+          let next: mSquare = new mSquare(xPOS, yPOS, size);
+          next.setLeft(previous);
+          if (previous != null) previous.setRight(next);
+          grid.push(next);
+          previous = next;
+        }
+      }
+    }
     
     class mSquare{
       xPOS: number;
@@ -130,6 +154,11 @@ export class MurdlePaneComponent implements OnInit {
       size: number;
       boxtext: string;
       bgColor: any;
+      above:mSquare | null;
+      below:mSquare | null;
+      right:mSquare | null;
+      left:mSquare | null;
+
       
       constructor(xPOS : number, yPOS : number, size : number){
         this.xPOS = xPOS;
@@ -137,6 +166,10 @@ export class MurdlePaneComponent implements OnInit {
         this.size = size;
         this.boxtext = ""
         this.bgColor = p.color(255, 255, 255);
+        this.above = null;
+        this.below = null;
+        this.right = null;
+        this.left = null;
       }
       
       isClicked(x : number, y : number){
@@ -220,6 +253,22 @@ export class MurdlePaneComponent implements OnInit {
           || (this.getYPOS() - yOffset) / size == mirrordXPOS && (this.getXPOS() - xOffset) / size == (oSquare.getXPOS() - xOffset) / size){
           this.setText("x");
         }
+      }
+
+      setAbove(above:mSquare | null){
+        this.above = above;
+      }
+
+      setBelow(below:mSquare | null){
+        this.below = below;
+      }
+
+      setRight(right:mSquare | null){
+        this.right = right;
+      }
+
+      setLeft(left:mSquare | null){
+        this.left = left;
       }
     }
   }
