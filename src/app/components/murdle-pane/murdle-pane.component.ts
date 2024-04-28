@@ -78,6 +78,29 @@ export class MurdlePaneComponent implements OnInit {
       createGrid(8, yOffset + size * 4);
       createGrid(4, yOffset + size * 8);
       
+      for (let i = 0; i < 36; i++){
+        grid[i].setBelow(grid[i + 12]);
+        grid[i + 12].setAbove(grid[i]);
+      }
+
+      for (let i = 0; i < 8; i++){
+        grid[i + 48].setAbove(grid[i + 36]);
+      }
+
+      for (let i = 0; i < 24; i++){
+        grid[i + 48].setBelow(grid[i + 56]);
+        grid[i + 56].setAbove(grid[i + 48]);
+      }
+
+      for (let i = 0; i < 4; i++){
+        grid[i + 80].setAbove(grid[i + 72]);
+      }
+
+      for (let i = 0; i < 12; i++){
+        grid[i + 80].setBelow(grid[i + 84]);
+        grid[i + 84].setAbove(grid[i + 80]);
+      }
+
       yOffset = originalYOffset;
       
       // p.textAlign(p.CENTER);
