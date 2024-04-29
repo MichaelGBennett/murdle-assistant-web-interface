@@ -94,6 +94,8 @@ export class MurdlePaneComponent implements OnInit {
       box1.push(grid[38])
       box1.push(grid[39])
 
+      box1.map(item => item.setBox(box1));
+
       box2.push(grid[4])
       box2.push(grid[5])
       box2.push(grid[6])
@@ -110,6 +112,8 @@ export class MurdlePaneComponent implements OnInit {
       box2.push(grid[41])
       box2.push(grid[42])
       box2.push(grid[43])
+
+      box2.map(item => item.setBox(box2));
 
       box3.push(grid[8])
       box3.push(grid[9])
@@ -128,6 +132,8 @@ export class MurdlePaneComponent implements OnInit {
       box3.push(grid[46])
       box3.push(grid[47])
 
+      box3.map(item => item.setBox(box3));
+
       box4.push(grid[48])
       box4.push(grid[49])
       box4.push(grid[50])
@@ -144,6 +150,8 @@ export class MurdlePaneComponent implements OnInit {
       box4.push(grid[73])
       box4.push(grid[74])
       box4.push(grid[75])
+
+      box4.map(item => item.setBox(box4));
 
       box5.push(grid[52])
       box5.push(grid[53])
@@ -162,6 +170,8 @@ export class MurdlePaneComponent implements OnInit {
       box5.push(grid[78])
       box5.push(grid[79])
 
+      box5.map(item => item.setBox(box5));
+
       box6.push(grid[80])
       box6.push(grid[81])
       box6.push(grid[82])
@@ -178,6 +188,8 @@ export class MurdlePaneComponent implements OnInit {
       box6.push(grid[93])
       box6.push(grid[94])
       box6.push(grid[95])
+
+      box6.map(item => item.setBox(box6));
 
       yOffset = originalYOffset;
       
@@ -215,6 +227,49 @@ export class MurdlePaneComponent implements OnInit {
             }
           }
         })
+        //check each box for 3 X in single row or colum
+        let nextRightSquare = grid[0];
+        nextRightSquare.checkBoxForThreeXinColumn(0, nextRightSquare.box != null ? nextRightSquare.box : box1);
+        while (nextRightSquare.right != null){
+          nextRightSquare.right.checkBoxForThreeXinColumn(0, nextRightSquare.right.box != null ? nextRightSquare.right.box : box1);
+          nextRightSquare = nextRightSquare.right;
+        }
+
+        nextRightSquare = grid[48];
+        nextRightSquare.checkBoxForThreeXinColumn(0, nextRightSquare.box != null ? nextRightSquare.box : box1);
+        while (nextRightSquare.right != null){
+          nextRightSquare.right.checkBoxForThreeXinColumn(0, nextRightSquare.right.box != null ? nextRightSquare.right.box : box1);
+          nextRightSquare = nextRightSquare.right;
+        }
+
+        nextRightSquare = grid[80];
+        nextRightSquare.checkBoxForThreeXinColumn(0, nextRightSquare.box != null ? nextRightSquare.box : box1);
+        while (nextRightSquare.right != null){
+          nextRightSquare.right.checkBoxForThreeXinColumn(0, nextRightSquare.right.box != null ? nextRightSquare.right.box : box1);
+          nextRightSquare = nextRightSquare.right;
+        }
+
+        let nextBelowSquare = grid[0];
+        nextBelowSquare.checkBoxForThreeXinRow(0, nextBelowSquare.box != null ? nextBelowSquare.box : box1)
+        while (nextBelowSquare.below != null){
+          nextBelowSquare.below.checkBoxForThreeXinRow(0, nextBelowSquare.below.box != null ? nextBelowSquare.below.box : box1);
+          nextBelowSquare = nextBelowSquare.below;
+        }
+
+        nextBelowSquare = grid[4];
+        nextBelowSquare.checkBoxForThreeXinRow(0, nextBelowSquare.box != null ? nextBelowSquare.box : box1)
+        while (nextBelowSquare.below != null){
+          nextBelowSquare.below.checkBoxForThreeXinRow(0, nextBelowSquare.below.box != null ? nextBelowSquare.below.box : box1);
+          nextBelowSquare = nextBelowSquare.below;
+        }
+
+        nextBelowSquare = grid[8];
+        nextBelowSquare.checkBoxForThreeXinRow(0, nextBelowSquare.box != null ? nextBelowSquare.box : box1)
+        while (nextBelowSquare.below != null){
+          nextBelowSquare.below.checkBoxForThreeXinRow(0, nextBelowSquare.below.box != null ? nextBelowSquare.below.box : box1);
+          nextBelowSquare = nextBelowSquare.below;
+        }
+
       }
       else if (p.mouseButton == p.RIGHT){
         grid.forEach(clickedSquare => {
@@ -259,6 +314,7 @@ export class MurdlePaneComponent implements OnInit {
       below:mSquare | null;
       right:mSquare | null;
       left:mSquare | null;
+      box:mSquare[] | null;
 
       
       constructor(xPOS : number, yPOS : number, size : number){
@@ -271,6 +327,7 @@ export class MurdlePaneComponent implements OnInit {
         this.below = null;
         this.right = null;
         this.left = null;
+        this.box = null;
       }
       
       isClicked(x : number, y : number){
@@ -372,6 +429,56 @@ export class MurdlePaneComponent implements OnInit {
 
       setLeft(left:mSquare | null){
         this.left = left;
+      }
+
+      setBox(box:mSquare[]){
+        this.box = box;
+      }
+
+      checkBoxForThreeXinColumn(xCount:number, box:mSquare[]) : number{
+        if(box.indexOf(this) < 0){
+          return -1;
+        }
+        if(this.getText() === "o"){
+          return -2;
+        }
+        if(this.getText() === "x"){
+          xCount ++;
+          if (xCount == 3){
+            return xCount;
+          }
+          return this.below != null ? this.below.checkBoxForThreeXinColumn(xCount, box) : -1;
+        }
+        if(this.getText() === ""){
+          xCount = this.below != null ? this.below.checkBoxForThreeXinColumn(xCount, box) : xCount;
+          if (xCount == 3){
+            this.setText("o");
+          }
+        }
+        return 0;
+      }
+
+      checkBoxForThreeXinRow(xCount:number, box:mSquare[]) : number{
+        if(box.indexOf(this) < 0){
+          return -1;
+        }
+        if(this.getText() === "o"){
+          return -2;
+        }
+        if(this.getText() === "x"){
+          xCount ++;
+          if (xCount == 3){
+            return xCount;
+          }
+          return this.right != null ? this.right.checkBoxForThreeXinRow(xCount, box) : -1;
+        }
+        if(this.getText() === ""){
+          xCount = this.right != null ? this.right.checkBoxForThreeXinRow(xCount, box) : xCount;
+          if (xCount == 3){
+            this.setText("o");
+          }
+        }
+        return 0;
       }
     }
   }
